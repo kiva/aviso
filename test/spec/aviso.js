@@ -75,34 +75,26 @@ describe('aviso', function () {
 
 
     describe('.close()', function () {
-        var clock;
-
-        beforeEach(function () {
-            clock = sinon.useFakeTimers();
-        });
-
-        afterEach(function () {
-            clock.restore();
-        });
-
 
         it('closes the aviso message and removes its contents from the dom', function (){
-            var am = aviso('My message');
+            var am = aviso('My message')
+            , clock = sinon.useFakeTimers();
 
             am.close();
             clock.tick(500);
             expect(am.$el).not.toBeInDom();
+
+            clock.restore();
         });
 
 
         it('animates the aviso message', function () {
-            this.spy($.fn, 'slideUp');
+            this.spy(Aviso.prototype, 'slideUp');
 
             var am = aviso('My message');
 
             am.close();
-            expect($.fn.slideUp).toHaveBeenCalled();
-            expect(am.$el.css('opacity')).toBeLessThan(1);
+            expect(Aviso.prototype.slideUp).toHaveBeenCalled();
         });
     });
 
@@ -113,12 +105,31 @@ describe('aviso', function () {
 
 
     describe('.slideUp()', function () {
+        it('animates the aviso message up (hides it)', function () {
+            this.spy($.fn, 'slideUp');
 
+            var am = aviso('My message');
+
+            am.slideUp();
+            expect(am.$el.css('opacity')).toBeLessThan(1);
+        });
     });
 
 
     describe('.slideDown()', function () {
+        it('animates the aviso message down (shows it)', function () {
+            this.spy($.fn, 'slideDown');
 
+            var am = aviso('My message')
+            , clock = sinon.useFakeTimers();
+
+            am.slideDown();
+            clock.tick(500);
+
+            expect($.fn.slideDown).toHaveBeenCalled();
+            expect(am.$el.css('opacity')).toEqual(1);
+            clock.restore();
+        });
     });
 
 

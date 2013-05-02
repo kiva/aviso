@@ -51,21 +51,17 @@ Aviso.prototype = {
 
 
     /**
-     * Performs the slideDown animation.  Do not call directly.
+     * Performs the slideDown animation.  Not intended to be called directly.
      *
-     * @param {Function} fn
+     * @return {*}
      */
-    slideDown: function(fn) {
-        return this.$el.slideDown(function () {
-            if (typeof fn == 'function') {
-                fn.call(self)
-            }
-        });
+    slideDown: function() {
+        return this.$el.css('opacity', 1).slideDown().promise();
     }
 
 
     /**
-     * Performs the slideUp animation.  Do not call directly.
+     * Performs the slideUp animation.  Not intended to be called directly.
      *
      * @param {Function} fn
      */
@@ -83,7 +79,7 @@ Aviso.prototype = {
         var opts;
 
         if (typeof message == 'object') {
-            opts = $.extend({}, options, message.options)
+            opts = $.extend({}, options, message.options);
             message = message.message;
         } else {
             opts = options;
