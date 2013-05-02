@@ -1,0 +1,6 @@
+<div id="{{id}}" class="{{classes}}">
+    <div class="avisoClose"></div>
+    {{#avisoItems}}
+        {{>avisoItem}}
+    {{/avisoItems}}
+</div>

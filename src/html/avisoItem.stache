@@ -1,0 +1,10 @@
+<div class="avisoItem">
+    <div class="avisoContent {{contentClasses}}">
+        {{#showImage}}
+
+        {{/showImage}}
+        {{^showImage}}
+
+        {{/showImage}}
+    </div>
+</div>
