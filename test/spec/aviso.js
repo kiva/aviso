@@ -13,12 +13,49 @@ describe('aviso', function () {
     });
 
 
-    it('calls .show on the Aviso instance if passed a string or array message', function () {
+    it('calls .show() on the Aviso instance if passed a string or array message', function () {
         this.spy(Aviso.prototype, 'show');
 
-        var am = aviso('My message');
+        aviso('My message');
         expect(Aviso.prototype.show).toHaveBeenCalled();
     });
+
+
+    it('calls .show() with merged defaults & options', function () {
+        this.spy(Aviso.prototype, 'show');
+
+        var newOptions = {xtra: true, validTypes: ['typeA', 'typeB']};
+        var expectedOptions = $.extend({}, aviso.defaults, newOptions);
+
+        aviso('My message', newOptions);
+        expect(Aviso.prototype.show).toHaveBeenCalledWith('My message', expectedOptions);
+    });
+
+
+    describe('.show()', function () {
+
+    });
+
+
+    describe('.close()', function () {
+
+    });
+
+
+    describe('.add()', function () {
+
+    });
+
+
+    describe('.slideUp()', function () {
+
+    });
+
+
+    describe('.slideDown()', function () {
+
+    });
+
 
 /*
 

@@ -8,10 +8,11 @@
  * @return {Aviso}
  */
 function aviso(messages, options) {
-    var _aviso = new Aviso(options);
+    var opts = setOptions(options)
+    , _aviso = new Aviso(opts);
 
     if (typeof messages == 'string' || $.isArray(messages)) {
-        _aviso.show(messages, options);
+        _aviso.show(messages, opts);
     }
 
     return _aviso;
@@ -36,28 +37,17 @@ aviso.defaults = {
  * @constructor
  */
 function Aviso(options) {
-    var opts = this.setOptions(options);
+    this.$el = $(options.el);
+    this.$close = $(options.closeEl, this.$el).click(this.close());
+    this.$content = $(options.bodyEl, this.$el);
 
-    this.$el = $(opts.el);
-    this.$close = $(opts.closeEl, this.$el).click(this.close());
-    this.$content = $(opts.bodyEl, this.$el);
-
-//    if (! this.$el.length || ! this.$close.length || ! this.$content.length) {
-//        throw 'Aviso Error: Missing required markup';
-//    }
+    if (! this.$el || ! this.$close || ! this.$content) {
+        throw 'Aviso Error: Missing required markup';
+    }
 }
 
 
 Aviso.prototype = {
-
-    /**
-     *
-     * @param {Object} options
-     * @return {Object}
-     */
-    setOptions: function(options) {
-        return $.extend({}, aviso.defaults, options);
-    }
 
 
     /**
@@ -65,7 +55,7 @@ Aviso.prototype = {
      *
      * @param {Function} fn
      */
-    , slideDown: function(fn) {
+    slideDown: function(fn) {
         return this.$el.slideDown(function () {
             if (typeof fn == 'function') {
                 fn.call(self)
@@ -138,11 +128,32 @@ Aviso.prototype = {
 };
 
 
+/**
+ *
+ * @param {Object} options
+ * @return {Object}
+ */
+function setOptions(options) {
+    return $.extend({}, aviso.defaults, options);
+}
+
+
+/**
+ *
+ * @param message
+ * @param options
+ * @return {String}
+ */
 function renderMessage(message, options) {
     return '<div class="avisoMsg">' + message + '</div>';
 }
 
 
+/**
+ *
+ * @param $els
+ * @return {*|jQuery}
+ */
 function wrap($els) {
     return $('<div class="avisoBody" />').html($els);
 }
