@@ -1,5 +1,6 @@
 buster.spec.expose();
 
+
 describe('aviso', function () {
     'use strict';
 
@@ -33,12 +34,76 @@ describe('aviso', function () {
 
 
     describe('.show()', function () {
+        it('accepts a string as the "message"', function () {
+            var am = aviso('Some message string');
+            expect(am.$el).toHaveHtml('Some message string');
+        });
+
+
+        it('accepts an array of "message" strings', function () {
+            var message1 = 'This is message 1'
+            , message2 = 'This is message 2';
+
+            var am = aviso([message1, message2]);
+            expect(am.$el).toHaveHtml('This is message 1');
+            expect(am.$el).toHaveHtml('This is message 2');
+        });
+
+
+        it('accepts an array of "message" objects', function () {
+            var message1 = {
+                message: 'This is message 1'
+            }
+            , message2 = {
+                    message: 'This is message 2'
+            };
+
+            var am = aviso([message1, message2]);
+            expect(am.$el).toHaveHtml('This is message 1');
+            expect(am.$el).toHaveHtml('This is message 2');
+        });
+
+
+        it('accepts a jQuery element as the "message"', function () {
+            var $messageEl = $('<div class="myCustomMessage">This is my custom message</div>');
+
+            var am = aviso($messageEl);
+            expect(am.$el).toHaveHtml('This is my custom message');
+        });
 
     });
 
 
     describe('.close()', function () {
+        var clock;
 
+        beforeEach(function () {
+            clock = sinon.useFakeTimers();
+        });
+
+        afterEach(function () {
+            clock.restore();
+        });
+
+
+        it('closes the aviso message and removes its contents from the dom', function (){
+            var am = aviso('My message');
+
+            am.close();
+            clock.tick(500);
+            expect(am.$el).not.toBeInDom();
+        });
+
+
+        it('animates the aviso message', function () {
+            this.spy($.fn, 'slideUp');
+
+            var am = aviso('My message');
+
+            am.close();
+            expect($.fn.slideUp).toHaveBeenCalled();
+            expect(am.$el.css('opacity')).toBeLessThan(1);
+        });
     });
 
 

@@ -7,7 +7,7 @@ config['development'] = {
         'components/jquery/jquery.js'
     ]
     , sources: ['src/js/aviso.js']
-    , specs: ['test/spec/**/*.js']
+    , specs: ['test/buster-jquery-assertions.js', 'test/spec/**/*.js']
 //    , extensions: [ require('buster-coverage') ]
 //    , "buster-coverage": {
 //        outputDirectory: "test/coverage"

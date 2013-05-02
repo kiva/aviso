@@ -11,7 +11,7 @@ function aviso(messages, options) {
     var opts = setOptions(options)
     , _aviso = new Aviso(opts);
 
-    if (typeof messages == 'string' || $.isArray(messages)) {
+    if (messages instanceof jQuery || typeof messages == 'string' || $.isArray(messages)) {
         _aviso.show(messages, opts);
     }
 
@@ -26,7 +26,7 @@ function aviso(messages, options) {
  */
 aviso.defaults = {
     validTypes: ['info', 'warning', 'error']
-    , el: $('<div id="aviso"><div class="avisoClose"></div><div class="avisoBody"></div></div>')
+    , el: '<div id="aviso"><div class="avisoClose"></div><div class="avisoBody"></div></div>'
     , closeEl: '.avisoClose'
     , bodyEl: '.avisoBody'
 };
@@ -69,15 +69,8 @@ Aviso.prototype = {
      *
      * @param {Function} fn
      */
-    , slideUp: function(fn) {
-        var self = this;
-
-        return this.$el.css('opacity', 0.3).slideUp('slow', function () {
-            self.$el.empty();
-            if (typeof fn == 'function') {
-                fn.call(self);
-            }
-        });
+    , slideUp: function() {
+        return this.$el.css('opacity', 0.3).slideUp('slow').promise();
     }
 
 
@@ -87,13 +80,22 @@ Aviso.prototype = {
      * @param {Object} options
      */
     , add: function (message, options) {
-        return renderMessage(message, options);
+        var opts;
+
+        if (typeof message == 'object') {
+            opts = $.extend({}, options, message.options)
+            message = message.message;
+        } else {
+            opts = options;
+        }
+
+        return renderMessage(message, opts);
     }
 
 
     /**
      *
-     * @param {String} messages
+     * @param {Array|String|Object} messages
      * @param {Object} options
      * @param {Function} fn
      */
@@ -106,12 +108,10 @@ Aviso.prototype = {
         } else if (typeof messages == 'string') {
             msgs = this.add(messages, options);
         } else if ($.isArray(messages)) {
-            $.each(messages, function (index, message) {
-                var opts = typeof message == 'object'
-                    ? $.extend({}, options, message.options)
-                    : options;
+            msgs = [];
 
-                msgs = self.add(message, opts);
+            $.each(messages, function (index, message) {
+                msgs.push(self.add(message, options));
             });
         }
 
@@ -122,8 +122,13 @@ Aviso.prototype = {
     }
 
 
-    , close: function (fn) {
-        this.slideUp(fn);
+    , close: function () {
+        var self = this;
+
+        return this.slideUp()
+            .done(function () {
+                self.$el.remove();
+            });
     }
 };
 
