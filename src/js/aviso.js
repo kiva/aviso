@@ -27,7 +27,7 @@ aviso.defaults = {
     validTypes: ['info', 'warning', 'error']
     , el: '#aviso'
     , closeEl: '.avisoClose'
-    , contentEl: 'avisoContent'
+    , bodyEl: '.avisoBody'
 };
 
 
@@ -43,14 +43,20 @@ function Aviso(options) {
     this.$close = $(aviso.closeEl, this.$el).click(this.close());
     this.$content = $(aviso.contentEl, this.$el);
 
-    if (! this.$tipMsg.length || ! this.$tipMsgClose.length || ! this.$tipMsgContent.length) {
+    if (! this.$el.length || ! this.$close.length || ! this.$content.length) {
         throw 'kvTipMsg Error: Missing required markup';
     }
 }
 
 
 Aviso.prototype = {
-    setOptions: function (options) {
+
+    /**
+     *
+     * @param {Object} options
+     * @return {Object}
+     */
+    setOptions: function(options) {
         var opts
         , defaults =  Aviso.defaults;
 
@@ -62,54 +68,72 @@ Aviso.prototype = {
     }
 
 
+    /**
+     * Performs the slideDown animation.  Do not call directly.
+     *
+     * @param {Function} fn
+     */
+    , slideDown: function(fn) {
+        return this.$el.slideDown(function () {
+            if (typeof fn == 'function') {
+                fn.call(self)
+            }
+        });
+    }
+
+
+    /**
+     * Performs the slideUp animation.  Do not call directly.
+     *
+     * @param {Function} fn
+     */
+    , slideUp: function(fn) {
+        var self = this;
+
+        return $el.css('opacity', 0.3).slideUp('slow', function () {
+            self.$el.empty();
+            if (typeof fn == 'function') {
+                fn.call(self);
+            }
+        });
+    }
+
+
+    /**
+     *
+     * @param {String} message
+     * @param {Object} options
+     */
+    , add: function (message, options) {
+        return generateMessage(message, options);
+    }
+
+
     , show: function (messages, options, fn) {
-        if (typeof messages == 'string') {
-            add(message, options);
+        var self = this
+        , $msgs = this.$el;
+
+        if (messages instanceof jQuery) {
+            $msgs.append(messages);
+        } else if (typeof messages == 'string') {
+            $msgs.append(this.add(message, options));
         } else if ($.isArray(messages)) {
             $.each(messages, function (index, message) {
-                add(message, options);
+                $msgs.append(self.add(message, options));
             });
         }
 
         $('html, body').animate({scrollTop: 0});
-        slideDown(this.$el, fn);
+        this.slideDown($msgs, fn);
     }
 
 
     , close: function (fn) {
-        slideUp(fn);
+        this.slideUp(fn);
     }
 };
 
 
-function slideDown($el, fn) {
-    var self = this;
-
-    return $el.slideDown(function () {
-        if (typeof fn == 'function') {
-            fn.call(self)
-        }
-    });
-}
-
-
-function slideUp($el, fn) {
-    var self = this;
-
-    return $el.css('opacity', 0.3).slideUp('slow', function () {
-        self.remove();
-        if (typeof fn == 'function') {
-            fn.call(self);
-        }
-    });
-}
-
-
-function generateMessage(message, options) {
-
-}
-
-
-function add(message, options) {
-
+function renderMessage(message, options) {
+    return '<div></div>';
 }
