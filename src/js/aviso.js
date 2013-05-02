@@ -105,24 +105,32 @@ Aviso.prototype = {
      * @param {Object} options
      */
     , add: function (message, options) {
-        return generateMessage(message, options);
+        return renderMessage(message, options);
     }
 
 
+    /**
+     *
+     */
     , show: function (messages, options, fn) {
-        var self = this
-        , $msgs = this.$el;
+        var msgs
+        , self = this;
 
         if (messages instanceof jQuery) {
-            $msgs.append(messages);
+            msgs = messages;
         } else if (typeof messages == 'string') {
-            $msgs.append(this.add(message, options));
+            msgs = this.add(message, options);
         } else if ($.isArray(messages)) {
             $.each(messages, function (index, message) {
-                $msgs.append(self.add(message, options));
+                var opts = typeof message == 'object'
+                    ? $.extend({}, options, message.options)
+                    : options;
+
+                msgs = self.add(message, opts);
             });
         }
 
+        this.$el.append(wrap(msgs));
         $('html, body').animate({scrollTop: 0});
         this.slideDown($msgs, fn);
     }
@@ -135,5 +143,10 @@ Aviso.prototype = {
 
 
 function renderMessage(message, options) {
-    return '<div></div>';
+    return '<div class="avisoMsg">' + message + '</div>';
+}
+
+
+function wrap($els) {
+    return $('<div class="avisoBody" />').html($els);
 }
