@@ -1,9 +1,26 @@
+buster.spec.expose();
+
 describe('aviso', function () {
     'use strict';
 
-    beforeEach(function () {
-        setFixtures('<div id="tipMsg" class="tipMsg"><div class="tipMsgClose">x</div><ul class="tipMsgContent"></ul></div>');
+    it('exposes the aviso() function', function () {
+        expect(aviso).toBeFunction();
     });
+
+
+    it('initializes and returns an instance of an Aviso message', function () {
+        expect(aviso() instanceof Aviso).toBeTrue();
+    });
+
+
+    it('calls .show on the Aviso instance if passed a string or array message', function () {
+        this.spy(Aviso.prototype, 'show');
+
+        var am = aviso('My message');
+        expect(Aviso.prototype.show).toHaveBeenCalled();
+    });
+
+/*
 
 
     describe('.config', function () {
@@ -157,4 +174,6 @@ describe('aviso', function () {
         expect($.fn.animate).toHaveBeenCalled();
         expect($.fn.slideDown).toHaveBeenCalled();
     });
+
+    */
 });

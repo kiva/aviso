@@ -25,7 +25,7 @@ function aviso(messages, options) {
  */
 aviso.defaults = {
     validTypes: ['info', 'warning', 'error']
-    , el: '#aviso'
+    , el: $('<div id="aviso"><div class="avisoClose"></div><div class="avisoBody"></div></div>')
     , closeEl: '.avisoClose'
     , bodyEl: '.avisoBody'
 };
@@ -33,19 +33,18 @@ aviso.defaults = {
 
 /**
  *
- * @param options
  * @constructor
  */
 function Aviso(options) {
-    this.setOptions(options);
+    var opts = this.setOptions(options);
 
-    this.$el = $(this.el);
-    this.$close = $(aviso.closeEl, this.$el).click(this.close());
-    this.$content = $(aviso.contentEl, this.$el);
+    this.$el = $(opts.el);
+    this.$close = $(opts.closeEl, this.$el).click(this.close());
+    this.$content = $(opts.bodyEl, this.$el);
 
-    if (! this.$el.length || ! this.$close.length || ! this.$content.length) {
-        throw 'kvTipMsg Error: Missing required markup';
-    }
+//    if (! this.$el.length || ! this.$close.length || ! this.$content.length) {
+//        throw 'Aviso Error: Missing required markup';
+//    }
 }
 
 
@@ -57,14 +56,7 @@ Aviso.prototype = {
      * @return {Object}
      */
     setOptions: function(options) {
-        var opts
-        , defaults =  Aviso.defaults;
-
-        if (options) {
-            opts = $.extend({}, defaults, options);
-        }
-
-        return opts;
+        return $.extend({}, aviso.defaults, options);
     }
 
 
@@ -90,7 +82,7 @@ Aviso.prototype = {
     , slideUp: function(fn) {
         var self = this;
 
-        return $el.css('opacity', 0.3).slideUp('slow', function () {
+        return this.$el.css('opacity', 0.3).slideUp('slow', function () {
             self.$el.empty();
             if (typeof fn == 'function') {
                 fn.call(self);
@@ -111,15 +103,18 @@ Aviso.prototype = {
 
     /**
      *
+     * @param {String} messages
+     * @param {Object} options
+     * @param {Function} fn
      */
     , show: function (messages, options, fn) {
-        var msgs
+        var $msgs, msgs
         , self = this;
 
         if (messages instanceof jQuery) {
             msgs = messages;
         } else if (typeof messages == 'string') {
-            msgs = this.add(message, options);
+            msgs = this.add(messages, options);
         } else if ($.isArray(messages)) {
             $.each(messages, function (index, message) {
                 var opts = typeof message == 'object'
@@ -130,7 +125,8 @@ Aviso.prototype = {
             });
         }
 
-        this.$el.append(wrap(msgs));
+        $msgs = wrap(msgs);
+        this.$el.append($msgs);
         $('html, body').animate({scrollTop: 0});
         this.slideDown($msgs, fn);
     }

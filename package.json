@@ -1,0 +1,28 @@
+{
+  "name": "aviso",
+  "version": "0.0.0",
+  "description": "A simple event messaging library",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test --verbose",
+    "prepublish": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kiva/aviso.git"
+  },
+  "keywords": [
+    "kiva",
+    "messaging"
+  ],
+  "license": "MIT",
+  "readmeFilename": "readme.md",
+  "devDependencies": {
+    "buster": "~0.6.12",
+    "grunt": "~0.4.1",
+    "grunt-buster": "~0.1.2",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-preprocess": "~2.3.0"
+  }
+}
