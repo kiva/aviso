@@ -111,10 +111,10 @@ Aviso.prototype = {
             });
         }
 
-        $msgs = wrap(msgs);
-        this.$el.append($msgs);
+        $msgs = $(msgs);
+        this.$content.append($msgs);
         $('html, body').animate({scrollTop: 0});
-        this.slideDown($msgs, fn);
+        this.slideDown();
     }
 
 
