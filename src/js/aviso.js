@@ -130,10 +130,8 @@ Aviso.prototype = {
     , close: function () {
         var self = this;
 
-        console.log(1)
         return this.slideUp()
             .done(function () {
-                console.log(2)
                 self.$el.remove();
             });
     }
