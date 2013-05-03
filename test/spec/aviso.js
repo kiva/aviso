@@ -76,12 +76,13 @@ describe('aviso', function () {
 
     describe('.close()', function () {
 
-        it('closes the aviso message and removes its contents from the dom', function (){
+        it('//@todo closes the aviso message and removes its contents from the dom', function (){
             var am = aviso('My message')
             , clock = sinon.useFakeTimers();
 
             am.close();
             clock.tick(500);
+
             expect(am.$el).not.toBeInDom();
 
             clock.restore();

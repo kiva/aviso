@@ -10,10 +10,10 @@
 function aviso(messages, options) {
     var opts, _aviso;
 
-    if (typeof options == 'string') {
-        options = {type: options};
-    } else if (typeof messages == 'object' && !($.isArray(messages) || messages.message)) {
+    if (typeof messages == 'object' && !(messages instanceof jQuery) &&!($.isArray(messages) || messages.message)) {
         options = messages;
+    } else if (typeof options == 'string') {
+        options = {type: options};
     }
 
     opts = setOptions(options);
@@ -109,8 +109,6 @@ Aviso.prototype = {
 
         if (messages instanceof jQuery) {
             $msgs = messages;
-        } else if (typeof messages == 'string' || typeof messages == 'object') {
-            $msgs = $(this.add(messages, options));
         } else if ($.isArray(messages)) {
             $msgs = $('<div />');
 
@@ -119,6 +117,8 @@ Aviso.prototype = {
             });
 
             $msgs = $msgs.html();
+        } else if (typeof messages == 'string' || typeof messages == 'object') {
+            $msgs = $(this.add(messages, options));
         }
 
         this.$content.append($msgs);
@@ -130,8 +130,10 @@ Aviso.prototype = {
     , close: function () {
         var self = this;
 
+        console.log(1)
         return this.slideUp()
             .done(function () {
+                console.log(2)
                 self.$el.remove();
             });
     }
