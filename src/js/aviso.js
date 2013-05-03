@@ -8,10 +8,17 @@
  * @return {Aviso}
  */
 function aviso(messages, options) {
-    var opts = setOptions(options)
-    , _aviso = new Aviso(opts);
+    var opts, _aviso;
 
-    if (messages instanceof jQuery || typeof messages == 'string' || $.isArray(messages)) {
+    if (typeof options == 'string') {
+        options = {type: options};
+    } else if (typeof messages == 'object' && !($.isArray(messages) || messages.message)) {
+        options = messages;
+    }
+
+    opts = setOptions(options);
+    _aviso = new Aviso(opts);
+    if (messages) {
         _aviso.show(messages, opts);
     }
 
@@ -26,9 +33,10 @@ function aviso(messages, options) {
  */
 aviso.defaults = {
     validTypes: ['info', 'warning', 'error']
-    , el: '<div id="aviso"><div class="avisoClose"></div><div class="avisoBody"></div></div>'
+    , el: '<div class="avisoWrapper"><div class="avisoContainer"><div class="avisoClose">x</div><div class="avisoContent"></div></div></div>'
     , closeEl: '.avisoClose'
-    , bodyEl: '.avisoBody'
+    , contentEl: '.avisoContent'
+    , containerEl: '.avisoContainer'
 };
 
 
@@ -38,12 +46,14 @@ aviso.defaults = {
  */
 function Aviso(options) {
     this.$el = $(options.el);
-    this.$close = $(options.closeEl, this.$el).click(this.close());
-    this.$content = $(options.bodyEl, this.$el);
+    this.$close = $(options.closeEl, this.$el).click($.proxy(handleCloseClick, this));
+    this.$content = $(options.contentEl, this.$el);
 
     if (! this.$el || ! this.$close || ! this.$content) {
         throw 'Aviso Error: Missing required markup';
     }
+
+    $('body').prepend(this.$el);
 }
 
 
@@ -63,7 +73,6 @@ Aviso.prototype = {
     /**
      * Performs the slideUp animation.  Not intended to be called directly.
      *
-     * @param {Function} fn
      */
     , slideUp: function() {
         return this.$el.css('opacity', 0.3).slideUp('slow').promise();
@@ -93,25 +102,25 @@ Aviso.prototype = {
      *
      * @param {Array|String|Object} messages
      * @param {Object} options
-     * @param {Function} fn
      */
-    , show: function (messages, options, fn) {
-        var $msgs, msgs
+    , show: function (messages, options) {
+        var $msgs
         , self = this;
 
         if (messages instanceof jQuery) {
-            msgs = messages;
-        } else if (typeof messages == 'string') {
-            msgs = this.add(messages, options);
+            $msgs = messages;
+        } else if (typeof messages == 'string' || typeof messages == 'object') {
+            $msgs = $(this.add(messages, options));
         } else if ($.isArray(messages)) {
-            msgs = [];
+            $msgs = $('<div />');
 
             $.each(messages, function (index, message) {
-                msgs.push(self.add(message, options));
+                $msgs.append(self.add(message, options));
             });
+
+            $msgs = $msgs.html();
         }
 
-        $msgs = $(msgs);
         this.$content.append($msgs);
         $('html, body').animate({scrollTop: 0});
         this.slideDown();
@@ -152,9 +161,10 @@ function renderMessage(message, options) {
 
 /**
  *
- * @param $els
- * @return {*|jQuery}
+ * @context {Aviso}
+ * @param {jQuery.Event} event
  */
-function wrap($els) {
-    return $('<div class="avisoBody" />').html($els);
+function handleCloseClick(event) {
+    event.preventDefault();
+    this.close();
 }
