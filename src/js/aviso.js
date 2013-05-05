@@ -10,7 +10,8 @@
 function aviso(messages, options) {
     var opts, _aviso;
 
-    if (typeof messages == 'object' && !(messages instanceof jQuery) &&!($.isArray(messages) || messages.message)) {
+    // We assume its an options object if there is no "message" property
+    if (typeof messages == 'object' && !(messages instanceof jQuery || $.isArray(messages) || messages.message)) {
         options = messages;
     } else if (typeof options == 'string') {
         options = {type: options};
@@ -18,12 +19,22 @@ function aviso(messages, options) {
 
     opts = setOptions(options);
     _aviso = new Aviso(opts);
+
     if (messages) {
         _aviso.show(messages, opts);
     }
 
     return _aviso;
 }
+
+
+/**
+ * Stores a reference to existing aviso messages.
+ *
+ * @type {Object}
+ * @private
+ */
+aviso._messages = {};
 
 
 /**
@@ -34,9 +45,10 @@ function aviso(messages, options) {
 aviso.defaults = {
     validTypes: ['info', 'warning', 'error']
     , el: '<div class="avisoWrapper"><div class="avisoContainer"><div class="avisoClose">x</div><div class="avisoContent"></div></div></div>'
-    , closeEl: '.avisoClose'
-    , contentEl: '.avisoContent'
-    , containerEl: '.avisoContainer'
+    , elClass: '.avisoWrapper'
+    , closeClass: '.avisoClose'
+    , contentClass: '.avisoContent'
+    , containerClass: '.avisoContainer'
 };
 
 
@@ -45,15 +57,16 @@ aviso.defaults = {
  * @constructor
  */
 function Aviso(options) {
+
     this.$el = $(options.el);
-    this.$close = $(options.closeEl, this.$el).click($.proxy(handleCloseClick, this));
-    this.$content = $(options.contentEl, this.$el);
+    this.$close = $(options.closeClass, this.$el).on('click.aviso', $.proxy(handleCloseClick, this));
+    this.$content = $(options.contentClass, this.$el);
 
     if (! this.$el || ! this.$close || ! this.$content) {
         throw 'Aviso Error: Missing required markup';
     }
 
-    $('body').prepend(this.$el);
+    $('body').append(this.$el);
 }
 
 
@@ -73,6 +86,7 @@ Aviso.prototype = {
     /**
      * Performs the slideUp animation.  Not intended to be called directly.
      *
+     * @returns {Promise}
      */
     , slideUp: function() {
         return this.$el.css('opacity', 0.3).slideUp('slow').promise();
@@ -99,13 +113,13 @@ Aviso.prototype = {
 
 
     /**
+     * Called by .show()
      *
      * @param {Array|String|Object} messages
      * @param {Object} options
      */
-    , show: function (messages, options) {
-        var $msgs
-        , self = this;
+    , _show: function (messages, options) {
+        var $msgs;
 
         if (messages instanceof jQuery) {
             $msgs = messages;
@@ -121,18 +135,48 @@ Aviso.prototype = {
             $msgs = $(this.add(messages, options));
         }
 
+
         this.$content.append($msgs);
+        aviso._messages.default = this;
         $('html, body').animate({scrollTop: 0});
         this.slideDown();
     }
 
 
+    /**
+     *
+     * @param {Array|String|Object} messages
+     * @param {Object} options
+     */
+    , show: function  (messages, options) {
+        var self = this
+
+        // @todo, eventually we will likely need to add "channels" so that multiple messages can be displayed at a time in various places.
+        // For now, there is just "default".
+        , prevMessage = aviso._messages.default;
+
+        if (prevMessage) {
+            prevMessage.close().done(function () {
+                self._show(messages, options);
+            });
+        } else {
+            this._show(messages, options);
+        }
+    }
+
+
+    /**
+     * Takes care of closing the message as well as removing it from the DOM
+     *
+     * @returns {Promise}
+     */
     , close: function () {
         var self = this;
 
         return this.slideUp()
             .done(function () {
                 self.$el.remove();
+                aviso._messages.default = null;
             });
     }
 };
