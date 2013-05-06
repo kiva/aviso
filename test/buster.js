@@ -15,3 +15,26 @@ config['development'] = {
 //        , combinedResultsOnly: true
 //    }
 };
+
+
+// @TODO Add tests for the /dist files
+//
+//config['core'] = {
+//    env: 'browser'
+//    , rootPath: '../'
+//    , deps: [
+//        'components/jquery/jquery.js'
+//    ]
+//    , sources: ['dist/aviso.js']
+//    , specs: ['test/buster-jquery-assertions.js', 'test/spec/**/*.js']
+//};
+//
+//config['amd'] = {
+//    env: 'browser'
+//    , rootPath: '../'
+//    , deps: [
+//        'components/jquery/jquery.js'
+//    ]
+//    , sources: ['dist/amd/aviso.js']
+//    , specs: ['test/buster-jquery-assertions.js', 'test/spec/**/*.js']
+//};
