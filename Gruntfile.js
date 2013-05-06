@@ -17,6 +17,13 @@ module.exports = function(grunt) {
         }
 
 
+        , buster: {
+            test: {
+                reporter: 'specification'
+            }
+        }
+
+
         , jshint: {
             options: {
                 jshintrc: '.jshintrc'
@@ -39,7 +46,7 @@ module.exports = function(grunt) {
     });
 
 
-
+    grunt.loadNpmTasks('grunt-buster');
     grunt.loadNpmTasks('grunt-rigger');
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
