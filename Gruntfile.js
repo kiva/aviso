@@ -7,12 +7,12 @@ module.exports = function(grunt) {
     grunt.initConfig({
         meta: {
             version: require('./package.json').version
-            , banner: '/**\n * aviso.js - <%= meta.version %>' +
-                ' *\n' +
-                ' * Copyright (c) <%= grunt.template.today("yyyy") %> Kiva Microfunds\n */' +
-                '* Licensed under the MIT license.\n' +
-                '* https://github.com/kiva/backbone.siren/blob/master/license.txt\n' +
-                '*/\n'
+            , banner: '/**\n * aviso.js - v<%= meta.version %> \n' +
+                ' * Copyright (c) <%= grunt.template.today("yyyy") %> Kiva Microfunds\n' +
+                ' * \n' +
+                ' * Licensed under the MIT license.\n' +
+                ' * https://github.com/kiva/backbone.siren/blob/master/license.txt\n' +
+                ' */\n'
 
         }
 
