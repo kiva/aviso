@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/kiva/aviso.png)](https://travis-ci.org/kiva/aviso)
 # Aviso.js
 
 
