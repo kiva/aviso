@@ -1,6 +1,6 @@
 define(['jquery'], function ($) {
 
-    //@include ../src/js/aviso.js
+    //= ../src/js/aviso.js
 
     return aviso;
 });

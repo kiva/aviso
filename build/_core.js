@@ -1,6 +1,6 @@
 (function ($, global) {
 
-    //@include ../src/js/aviso.js
+    //= ../src/js/aviso.js
 
     global.aviso = aviso;
 
