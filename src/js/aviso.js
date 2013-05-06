@@ -119,7 +119,8 @@ Aviso.prototype = {
      * @param {Object} options
      */
     , _show: function (messages, options) {
-        var $msgs;
+        var $msgs
+        , self = this;
 
         if (messages instanceof jQuery) {
             $msgs = messages;
@@ -148,7 +149,7 @@ Aviso.prototype = {
      * @param {Array|String|Object} messages
      * @param {Object} options
      */
-    , show: function  (messages, options) {
+    , show: function (messages, options) {
         var self = this
 
         // @todo, eventually we will likely need to add "channels" so that multiple messages can be displayed at a time in various places.

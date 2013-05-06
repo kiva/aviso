@@ -4,6 +4,17 @@ buster.spec.expose();
 describe('aviso', function () {
     'use strict';
 
+    after(function () {
+        var prevMessage = aviso._messages.default;
+
+        // Clean out any existing messages from previous tests
+        if (prevMessage) {
+            prevMessage.$el.remove();
+            delete aviso._messages.default;
+        }
+    });
+
+
     it('exposes the aviso() function', function () {
         expect(aviso).toBeFunction();
     });
@@ -71,21 +82,40 @@ describe('aviso', function () {
             expect(am.$el).toHaveHtml('This is my custom message');
         });
 
+
+        it('closes any existing tip messages before showing a new one', function () {
+            this.spy(Aviso.prototype, 'close');
+
+            var prevMessage = aviso('Some previous message')
+            , message = aviso('My new message');
+
+            expect(Aviso.prototype.close).toHaveBeenCalledOnce();
+        })
+
     });
 
 
     describe('.close()', function () {
+        before(function() {
+            this.timeout = 2000;
+        });
 
-        it('//@todo closes the aviso message and removes its contents from the dom', function (){
+        it('closes the aviso message and removes its contents from the dom', function (){
+            this.spy($.prototype, 'remove');
+
             var am = aviso('My message')
-            , clock = sinon.useFakeTimers();
+            , closedPromise = am.close();
 
-            am.close();
-            clock.tick(500);
+            expect(closedPromise).toBePromise();
 
-            expect(am.$el).not.toBeInDom();
+            // @todo this won't get called until the issue with returning promises is resolved with Busterjs.
+            closedPromise.done(function () {
+                expect($.prototype.remove).toHaveBeenCalledOnce();
+                expect(true).toBeTrue();
+            });
 
-            clock.restore();
+//            @todo, for whatever reason, returning a promise is resulting in "undefined" hoping its a bug in Buster...
+//            return closedPromise;
         });
 
 
