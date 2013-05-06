@@ -16,6 +16,15 @@ module.exports = function(grunt) {
 
         }
 
+
+        , jshint: {
+            options: {
+                jshintrc: '.jshintrc'
+            }
+            , all: ['src/*.js', 'test/spec/**/*.js']
+        }
+
+
         , rig: {
             compile: {
                 options: {
@@ -32,4 +41,7 @@ module.exports = function(grunt) {
 
 
     grunt.loadNpmTasks('grunt-rigger');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
+    grunt.registerTask('test', ['jshint', 'buster']);
 };
