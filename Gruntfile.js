@@ -16,9 +16,12 @@ module.exports = function(grunt) {
 
         }
 
-        , preprocess: {
+        , rig: {
             compile: {
-                files: {
+                options: {
+                    banner: '<%= meta.banner %>'
+                }
+                , files: {
                     'dist/amd/aviso.js': ['build/_amd.js']
                     , 'dist/aviso.js': ['build/_core.js']
                 }
@@ -28,5 +31,5 @@ module.exports = function(grunt) {
 
 
 
-    grunt.loadNpmTasks('grunt-preprocess');
+    grunt.loadNpmTasks('grunt-rigger');
 };
