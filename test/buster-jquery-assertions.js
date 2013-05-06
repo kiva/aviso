@@ -63,6 +63,8 @@
 
     buster.assertions.add("isInDom", {
         assert: function ($el) {
+//            console.log($.contains);
+            conosle.log(document.documentElement);
             return $.contains(document.documentElement, $el[0]);
         },
         assertMessage: "${2}Expected [${0}] to be in the DOM",
@@ -118,6 +120,19 @@
         assertMessage: "${2}Expected [${0}] to be hidden",
         refuteMessage: "${2}Expected [${0}] not to be hidden",
         expectation: "toBeHidden",
+        values: actualAndExpectedMessageValues
+    });
+
+    buster.assertions.add("isPromise", {
+        assert: function (value) {
+            if (typeof value.then !== "function") {
+                return false;
+            }
+            return String($.Deferred().then) === String(value.then);
+        },
+        assertMessage: "${2}Expected [${0}] to be a promise object",
+        refuteMessage: "${2}Expected [${0}] not to be a promise object",
+        expectation: "toBePromise",
         values: actualAndExpectedMessageValues
     });
 
