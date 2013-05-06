@@ -5,12 +5,12 @@ describe('aviso', function () {
     'use strict';
 
     after(function () {
-        var prevMessage = aviso._messages.default;
+        var prevMessage = aviso._messages.one;
 
         // Clean out any existing messages from previous tests
         if (prevMessage) {
             prevMessage.$el.remove();
-            delete aviso._messages.default;
+            delete aviso._messages.one;
         }
     });
 
@@ -86,11 +86,11 @@ describe('aviso', function () {
         it('closes any existing tip messages before showing a new one', function () {
             this.spy(Aviso.prototype, 'close');
 
-            var prevMessage = aviso('Some previous message')
-            , message = aviso('My new message');
+            aviso('Some previous message');
+            aviso('My new message');
 
             expect(Aviso.prototype.close).toHaveBeenCalledOnce();
-        })
+        });
 
     });
 

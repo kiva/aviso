@@ -138,7 +138,7 @@ Aviso.prototype = {
 
 
         this.$content.append($msgs);
-        aviso._messages.default = this;
+        aviso._messages.one = this;
         $('html, body').animate({scrollTop: 0});
         this.slideDown();
     }
@@ -154,7 +154,7 @@ Aviso.prototype = {
 
         // @todo, eventually we will likely need to add "channels" so that multiple messages can be displayed at a time in various places.
         // For now, there is just "default".
-        , prevMessage = aviso._messages.default;
+        , prevMessage = aviso._messages.one;
 
         if (prevMessage) {
             prevMessage.close().done(function () {
@@ -177,7 +177,7 @@ Aviso.prototype = {
         return this.slideUp()
             .done(function () {
                 self.$el.remove();
-                aviso._messages.default = null;
+                aviso._messages.one = null;
             });
     }
 };
