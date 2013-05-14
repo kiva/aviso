@@ -43,12 +43,27 @@ module.exports = function(grunt) {
                 }
             }
         }
+
+
+        , uglify: {
+            target: {
+                options: {
+                    banner: '<%= meta.banner %>'
+                }
+                , files: {
+                    'dist/aviso.min.js': ['dist/aviso.js']
+                    , 'dist/amd/aviso.min.js': ['dist/amd/aviso.js']
+                }
+            }
+        }
     });
 
 
     grunt.loadNpmTasks('grunt-buster');
     grunt.loadNpmTasks('grunt-rigger');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask('test', ['jshint', 'buster']);
+    grunt.registerTask('build', ['jshint', 'buster', 'rig', 'uglify']);
 };

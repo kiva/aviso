@@ -1,5 +1,5 @@
 /**
- * aviso.js - v0.1.0 
+ * aviso.js - v0.1.1 
  * Copyright (c) 2013 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -147,7 +147,7 @@
     
     
             this.$content.append($msgs);
-            aviso._messages.default = this;
+            aviso._messages.one = this;
             $('html, body').animate({scrollTop: 0});
             this.slideDown();
         }
@@ -163,7 +163,7 @@
     
             // @todo, eventually we will likely need to add "channels" so that multiple messages can be displayed at a time in various places.
             // For now, there is just "default".
-            , prevMessage = aviso._messages.default;
+            , prevMessage = aviso._messages.one;
     
             if (prevMessage) {
                 prevMessage.close().done(function () {
@@ -186,7 +186,7 @@
             return this.slideUp()
                 .done(function () {
                     self.$el.remove();
-                    aviso._messages.default = null;
+                    aviso._messages.one = null;
                 });
         }
     };
