@@ -5,12 +5,12 @@ describe('aviso', function () {
     'use strict';
 
     after(function () {
-        var prevMessage = aviso._messages.one;
+        var prevMessage = aviso._messages['default'];
 
         // Clean out any existing messages from previous tests
         if (prevMessage) {
             prevMessage.$el.remove();
-            delete aviso._messages.one;
+            delete aviso._messages['default'];
         }
     });
 
