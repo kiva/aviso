@@ -45,10 +45,10 @@ aviso._messages = {};
 aviso.defaults = {
     validTypes: ['info', 'warning', 'error']
     , el: '<div class="avisoWrapper"><div class="avisoContainer"><div class="avisoClose">x</div><div class="avisoContent"></div></div></div>'
-    , elClass: '.avisoWrapper'
-    , closeClass: '.avisoClose'
-    , contentClass: '.avisoContent'
-    , containerClass: '.avisoContainer'
+    , elClass: 'avisoWrapper'
+    , closeClass: 'avisoClose'
+    , contentClass: 'avisoContent'
+    , containerClass: 'avisoContainer'
 };
 
 
@@ -59,8 +59,8 @@ aviso.defaults = {
 function Aviso(options) {
 
     this.$el = $(options.el);
-    this.$close = $(options.closeClass, this.$el).on('click.aviso', $.proxy(handleCloseClick, this));
-    this.$content = $(options.contentClass, this.$el);
+    this.$close = $('.' + options.closeClass, this.$el).on('click.aviso', $.proxy(handleCloseClick, this));
+    this.$content = $('.' + options.contentClass, this.$el);
 
     if (! this.$el || ! this.$close || ! this.$content) {
         throw 'Aviso Error: Missing required markup';
@@ -95,6 +95,39 @@ Aviso.prototype = {
 
     /**
      *
+     * @param message
+     * @param options
+     * @return {String}
+     */
+    , renderMessage: function (message, options) {
+        var messageType;
+
+        messageType = $.inArray(options.type, options.validTypes) < 0
+            ? options.validTypes[0]
+            : options.type;
+
+        this.setMessageType(messageType, options);
+        return '<div class="avisoMsg avisoMsg-' + messageType + '">' + message + '</div>';
+    }
+
+
+    /**
+     * This is a little funky but we use the order of the valid types to determine their "priority"
+     * A valid type that is later in the array is considered to be of a higher "priority" and we use it
+     * to set the overall "type" of the message.
+     *
+     */
+    , setMessageType: function (messageType, options) {
+        var validTypes = options.validTypes;
+
+        if (!this.messageType || ($.inArray(messageType, validTypes) > $.inArray(this.messageType, validTypes))) {
+            this.messageType = messageType;
+        }
+    }
+
+
+    /**
+     *
      * @param {String} message
      * @param {Object} options
      */
@@ -108,7 +141,7 @@ Aviso.prototype = {
             opts = options;
         }
 
-        return renderMessage(message, opts);
+        return this.renderMessage(message, opts);
     }
 
 
@@ -137,8 +170,9 @@ Aviso.prototype = {
         }
 
 
+        this.$el.addClass(options.elClass + '-' + this.messageType);
         this.$content.append($msgs);
-        aviso._messages.one = this;
+        aviso._messages['default'] = this;
         $('html, body').animate({scrollTop: 0});
         this.slideDown();
     }
@@ -154,7 +188,7 @@ Aviso.prototype = {
 
         // @todo, eventually we will likely need to add "channels" so that multiple messages can be displayed at a time in various places.
         // For now, there is just "default".
-        , prevMessage = aviso._messages.one;
+        , prevMessage = aviso._messages['default'];
 
         if (prevMessage) {
             prevMessage.close().done(function () {
@@ -177,7 +211,7 @@ Aviso.prototype = {
         return this.slideUp()
             .done(function () {
                 self.$el.remove();
-                aviso._messages.one = null;
+                aviso._messages['default'] = null;
             });
     }
 };
@@ -190,17 +224,6 @@ Aviso.prototype = {
  */
 function setOptions(options) {
     return $.extend({}, aviso.defaults, options);
-}
-
-
-/**
- *
- * @param message
- * @param options
- * @return {String}
- */
-function renderMessage(message, options) {
-    return '<div class="avisoMsg">' + message + '</div>';
 }
 
 
