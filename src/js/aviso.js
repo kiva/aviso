@@ -49,6 +49,7 @@ aviso.defaults = {
     , closeClass: 'avisoClose'
     , contentClass: 'avisoContent'
     , containerClass: 'avisoContainer'
+	, scrollOnShow: false
 };
 
 
@@ -89,7 +90,7 @@ Aviso.prototype = {
      * @returns {Promise}
      */
     , slideUp: function() {
-        return this.$el.css('opacity', 0.3).slideUp('slow').promise();
+        return this.$el.css('opacity', 0.3).slideUp().promise();
     }
 
 
@@ -173,7 +174,11 @@ Aviso.prototype = {
         this.$el.addClass(options.elClass + '-' + this.messageType);
         this.$content.append($msgs);
         aviso._messages['default'] = this;
-        $('html, body').animate({scrollTop: 0});
+
+		if (options.scrollOnShow) {
+			$('html, body').animate({scrollTop: 0});
+		}
+
         this.slideDown();
     }
 
