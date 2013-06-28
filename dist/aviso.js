@@ -1,5 +1,5 @@
 /**
- * aviso.js - v0.1.2 
+ * aviso.js - v0.1.3 
  * Copyright (c) 2013 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -58,6 +58,7 @@
         , closeClass: 'avisoClose'
         , contentClass: 'avisoContent'
         , containerClass: 'avisoContainer'
+    	, scrollOnShow: false
     };
     
     
@@ -98,7 +99,7 @@
          * @returns {Promise}
          */
         , slideUp: function() {
-            return this.$el.css('opacity', 0.3).slideUp('slow').promise();
+            return this.$el.css('opacity', 0.3).slideUp().promise();
         }
     
     
@@ -182,7 +183,11 @@
             this.$el.addClass(options.elClass + '-' + this.messageType);
             this.$content.append($msgs);
             aviso._messages['default'] = this;
-            $('html, body').animate({scrollTop: 0});
+    
+    		if (options.scrollOnShow) {
+    			$('html, body').animate({scrollTop: 0});
+    		}
+    
             this.slideDown();
         }
     

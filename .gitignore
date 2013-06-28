@@ -5,4 +5,8 @@ npm-debug.log
 /test/coverage
 
 # The following are ignore using --assume-unchanged
+# View a list of files marked "unchanged": `git ls-files -v`
+# To recursively update: `git ls-files -z myFolderToIgnore/ | xargs -0 git update-index --assume-unchanged`
+# Or: `git ls-files -z myFolderToIgnore/ | xargs -0 git update-index --no-assume-unchanged`
+#
 # dist/
