@@ -108,7 +108,7 @@ Aviso.prototype = {
             : options.type;
 
         this.setMessageType(messageType, options);
-        return '<div class="avisoMsg avisoMsg-' + messageType + '">' + message + '</div>';
+        return '<div class="avisoMsg avisoMsg-' + messageType + '"><div class="avisoMsgIcon"></div>' + message + '</div>';
     }
 
 
