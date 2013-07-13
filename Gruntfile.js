@@ -65,5 +65,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.registerTask('test', ['jshint', 'buster']);
-    grunt.registerTask('build', ['jshint', 'buster', 'rig', 'uglify']);
+    grunt.registerTask('build', ['rig', 'uglify']);
 };
