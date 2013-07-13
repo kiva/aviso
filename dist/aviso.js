@@ -1,5 +1,5 @@
 /**
- * aviso.js - v0.1.3 
+ * aviso.js - v0.1.4 
  * Copyright (c) 2013 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -117,7 +117,7 @@
                 : options.type;
     
             this.setMessageType(messageType, options);
-            return '<div class="avisoMsg avisoMsg-' + messageType + '">' + message + '</div>';
+            return '<div class="avisoMsg avisoMsg-' + messageType + '"><div class="avisoMsgIcon"></div>' + message + '</div>';
         }
     
     
