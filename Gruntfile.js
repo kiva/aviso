@@ -11,7 +11,7 @@ module.exports = function(grunt) {
                 ' * Copyright (c) <%= grunt.template.today("yyyy") %> Kiva Microfunds\n' +
                 ' * \n' +
                 ' * Licensed under the MIT license.\n' +
-                ' * https://github.com/kiva/backbone.siren/blob/master/license.txt\n' +
+                ' * https://github.com/kiva/aviso/blob/master/license.txt\n' +
                 ' */\n'
 
         }
