@@ -4,7 +4,7 @@ config['development'] = {
     env: 'browser'
     , rootPath: '../'
     , deps: [
-        'components/jquery/jquery.js'
+        'bower_components/jquery/jquery.js'
     ]
     , sources: ['src/js/aviso.js']
     , specs: ['test/buster-jquery-assertions.js', 'test/spec/**/*.js']
