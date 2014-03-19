@@ -18,7 +18,7 @@
   "license": "MIT",
   "readmeFilename": "readme.md",
   "devDependencies": {
-    "buster": "~0.6.12",
+    "buster": "0.7.10",
     "buster-coverage": "~0.1.0",
     "grunt": "~0.4.1",
     "grunt-buster": "~0.1.2",
