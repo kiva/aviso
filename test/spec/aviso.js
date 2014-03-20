@@ -160,7 +160,7 @@ describe('aviso', function () {
             clock.tick(500);
 
             expect($.fn.slideDown).toHaveBeenCalled();
-            expect(am.$el.css('opacity')).toEqual(1);
+            expect(am.$el.css('opacity')).toEqual('1');
             clock.restore();
         });
     });
