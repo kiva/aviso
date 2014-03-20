@@ -4,6 +4,8 @@ buster.spec.expose();
 describe('aviso', function () {
     'use strict';
 
+	var expect = buster.expect;
+
     after(function () {
         var prevMessage = aviso._messages['default'];
 
