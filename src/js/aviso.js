@@ -22,6 +22,12 @@ function aviso(messages, options) {
 
     if (messages) {
         _aviso.show(messages, opts);
+
+	    if (opts.autoClose) {
+		    setTimeout(function () {
+			    _aviso.close();
+		    }, opts.setTimeout);
+	    }
     }
 
     return _aviso;
@@ -50,6 +56,8 @@ aviso.defaults = {
     , contentClass: 'avisoContent'
     , containerClass: 'avisoContainer'
 	, scrollOnShow: false
+	, setTimeout: 2500
+	, autoClose: null
 };
 
 
