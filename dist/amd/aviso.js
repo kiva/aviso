@@ -1,9 +1,9 @@
 /**
- * aviso.js - v0.1.4 
- * Copyright (c) 2013 Kiva Microfunds
+ * aviso.js - v0.1.5 
+ * Copyright (c) 2014 Kiva Microfunds
  * 
  * Licensed under the MIT license.
- * https://github.com/kiva/backbone.siren/blob/master/license.txt
+ * https://github.com/kiva/aviso/blob/master/license.txt
  */
 define(['jquery'], function ($) {
 
@@ -31,6 +31,12 @@ define(['jquery'], function ($) {
     
         if (messages) {
             _aviso.show(messages, opts);
+    
+    	    if (opts.autoClose) {
+    		    setTimeout(function () {
+    			    _aviso.close();
+    		    }, opts.setTimeout);
+    	    }
         }
     
         return _aviso;
@@ -59,6 +65,8 @@ define(['jquery'], function ($) {
         , contentClass: 'avisoContent'
         , containerClass: 'avisoContainer'
     	, scrollOnShow: false
+    	, setTimeout: 2500
+    	, autoClose: null
     };
     
     
