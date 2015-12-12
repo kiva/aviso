@@ -7,8 +7,9 @@
  * @param options
  * @return {Aviso}
  */
-function aviso(messages, options) {
+function aviso(messages, options, template) {
     var opts, _aviso;
+	this.template = template;
 
     // We assume its an options object if there is no "message" property
     if (typeof messages == 'object' && !(messages instanceof jQuery || $.isArray(messages) || messages.message)) {
@@ -120,6 +121,18 @@ Aviso.prototype = {
     }
 
 
+	, renderTemplate: function (message, options) {
+		var messageType;
+
+		messageType = $.inArray(options.type, options.validTypes) < 0
+			? options.validTypes[0]
+			: options.type;
+
+		this.setMessageType(messageType, options);
+		return this.template({'message': message, 'type': messageType});
+	}
+
+
     /**
      * This is a little funky but we use the order of the valid types to determine their "priority"
      * A valid type that is later in the array is considered to be of a higher "priority" and we use it
@@ -149,6 +162,10 @@ Aviso.prototype = {
         } else {
             opts = options;
         }
+
+		if (this.template){
+			return this.renderTemplate(message, opts);
+		}
 
         return this.renderMessage(message, opts);
     }
