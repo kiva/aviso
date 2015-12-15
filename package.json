@@ -1,6 +1,6 @@
 {
   "name": "aviso",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "A simple event messaging library",
   "main": "index.js",
   "scripts": {
