@@ -1,5 +1,5 @@
 /**
- * aviso.js - v0.1.8 
+ * aviso.js - v0.1.10 
  * Copyright (c) 2015 Kiva Microfunds
  * 
  * Licensed under the MIT license.
@@ -16,9 +16,8 @@ define(['jquery'], function ($) {
      * @param options
      * @return {Aviso}
      */
-    function aviso(messages, options, template) {
+    function aviso(messages, options) {
         var opts, _aviso;
-    	this.template = template;
     
         // We assume its an options object if there is no "message" property
         if (typeof messages == 'object' && !(messages instanceof jQuery || $.isArray(messages) || messages.message)) {
@@ -138,7 +137,7 @@ define(['jquery'], function ($) {
     			: options.type;
     
     		this.setMessageType(messageType, options);
-    		return this.template({'message': message, 'type': messageType});
+    		return options.messagingTemplate({'message': message, 'type': messageType});
     	}
     
     
@@ -172,7 +171,7 @@ define(['jquery'], function ($) {
                 opts = options;
             }
     
-    		if (this.template){
+    		if (options.messagingTemplate){
     			return this.renderTemplate(message, opts);
     		}
     
